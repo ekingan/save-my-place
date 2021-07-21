@@ -4,4 +4,7 @@ class PagesController < ApplicationController
 
   def events
   end
+
+  def index
+  end
 end

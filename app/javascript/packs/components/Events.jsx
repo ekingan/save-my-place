@@ -1,33 +1,41 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState} from 'react';
+import { Link } from "react-router-dom";
+import { Col, Row } from 'react-bootstrap';
+import axios from 'axios';
+import Event from './Event';
+import Spinner from './Spinner';
 
-class Events extends React.Component {
-  constructor(props) {
-    super(props)
-    this.handleClick = this.handleClick.bind(this)
-  }
-  handleClick() {
-    this.props.toggleCompletedTodoItems()
-  }
-  render() {
-    return (
-      <>
-        <div className="table-responsive">
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col">Starts At</th>
-                <th scope="col">Item</th>
-                <th scope="col" className="text-right">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>{this.props.children}</tbody>
-          </table>
-        </div>
-      </>
-    )
-  }
+const Events = () => {
+  const [events, setEvents] = useState([]);
+  const [isLoading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true)
+      const result = await axios("/api/v1/home");
+      console.log(result);
+      setEvents(result.data);
+      setLoading(false)
+    };
+
+    fetchData();
+  }, []);
+
+  return (
+    <>
+      {isLoading && <Spinner />}
+      {events.length && (
+        <Row xs={1} md={1} className="g-5">
+          {events.map((event) => (
+            <Col>
+              <Link to={`/events/${event.id}`} className="btn btn-link">
+                <Event event={event}/>
+              </Link>
+            </Col>
+          ))}
+        </Row>
+      )}
+    </>
+  )
 }
+
 export default Events

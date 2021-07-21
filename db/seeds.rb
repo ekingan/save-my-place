@@ -9,7 +9,7 @@
 end
 
 User.all.each do |u|
-    10.times do |i|
-      u.events.create(title: "Event #{i+1}", start_time: Time.now + i.days  )
-    end
+  10.times do |i|
+    u.events.create(title: "Event #{i+1}", start_time: Time.now + i.days)
+  end
 end

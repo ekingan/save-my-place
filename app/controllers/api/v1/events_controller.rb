@@ -2,7 +2,11 @@ class Api::V1::EventsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_event, only: [:show, :edit, :update, :destroy]
   def index
-    @events = current_user.events.all
+    if params[:mine]
+      @events = current_user.events.all
+    else
+      @events = Events.all
+    end
   end
 
   def show
@@ -40,7 +44,7 @@ class Api::V1::EventsController < ApplicationController
         end
       end
     else
-        handle_unauthorized
+      handle_unauthorized
     end
   end
 
